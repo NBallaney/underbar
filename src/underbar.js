@@ -51,8 +51,8 @@ var _ = {};
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
     var test=false;
-    if(Array.isArray(collection))test=true;
-    if(test){
+    if(Array.isArray(collection))test=1;
+    if(test==true){
       for(var i=0;i<collection.length;i++){
         iterator(collection[i],i,collection);
       }
@@ -157,18 +157,10 @@ var _ = {};
   // Calls the method named by functionOrKey on each value in the list.
   // Note: you will nead to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
-    var array=[];
-    if(typeof functionOrKey == "string"){
-      var fn= window (functionOrKey)();
-      console.log(fn);
-    }
-    else{
-      var fn=functionOrKey;
-    }
-    for(var i in collection){
-      array.push(fn.apply(collection[i],collection));
-    }
-    return array;
+    var isFunc= typeof functionOrKey=="function";
+    return _.map(collection,function(value){
+      return (isFunc ? functionOrKey : value[functionOrKey]).apply(value,args);
+    });
   };
 
   // Reduces an array or object to a single value by repetitively calling
